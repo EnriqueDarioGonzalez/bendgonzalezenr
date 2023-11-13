@@ -1,0 +1,10 @@
+[
+  {
+    "Name": "Producto 1 Editado",
+    "Price": 15.99,
+    "Thumbnail": "thumbnail1_editado.jpg",
+    "Code": "P1",
+    "Stock": 120,
+    "ID": 1
+  }
+]
