@@ -1,10 +1,10 @@
-const fs = require('fs').promises; // Módulo fs con soporte para promesas
+const fs = require('fs').promises;
 
 class ProductManager {
   constructor() {
     this.products = [];
     this.nextID = 1;
-    this.loadProductsFromFile(); // Cargar productos al inicializar la instancia
+    this.loadProductsFromFile();
   }
 
   async addProduct(product) {
@@ -23,7 +23,6 @@ class ProductManager {
   
   async editProductByID(id, updatedProduct) {
     const index = this.products.findIndex((p) => p.ID === id);
-
     if (index !== -1) {
       updatedProduct.ID = id;
       this.products[index] = updatedProduct;
@@ -66,7 +65,7 @@ class ProductManager {
   }
 
   async getProducts() {
-    await this.loadProductsFromFile(); // Cargar productos antes de devolverlos
+    await this.loadProductsFromFile();
     return this.products;
   }
 
