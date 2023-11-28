@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('node:fs').promises;
 
 class ProductManager {
   constructor() {
@@ -78,6 +78,19 @@ class ProductManager {
       console.log("Error: Producto no encontrado.");
     }
   }
+
+
+  async update(pid, updateToProduct){
+
+    let products = await this.readFile()
+    const productIndex = products.findIndex(product => pid === product.id)
+    if (productIndex !== -1) {
+      products[productIndex] = updateToProduct
+    }
+    await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
+    return 'producto'
 }
+}
+
 
 module.exports = ProductManager;
