@@ -1,9 +1,12 @@
-
 const express = require('express');
 const ProductManager = require('./ProductManager');
 const productsRouter = require('./routes/products.router.js')
 const cartRouter = require('./routes/cart.router.js');
-const router = require('./routes/cart.router.js');
+const handlebars = require('express-handlebars')
+const viewsRouter = require('./routes/views.router.js')
+const userRouter = require('./routes/users.routers.js')
+
+const { Server } = require('socket.io')
 
 const app = express();
 const puerto = 8080;
@@ -11,30 +14,33 @@ app.use(express.json());
 
 const manager = new ProductManager();
 
-// app.get('/products', async (req, res) => {
-//   const products = await manager.getProducts();
-//   res.json(products);
-// });
+app.engine('hbs', handlebars.engine({
+  extname: '.hbs'
+}))
+app.set('view engine', 'hbs')
+app.set('views', __dirname + '/views')
 
-// app.get('/productslimit', async (req, res) => {
-//     let limit = parseInt(req.query.limit, 3);
-//     if (isNaN(limit) || limit <= 0) {
-//       limit = undefined;
-//     }
-//     const products = await manager.getProducts(limit);
-//     res.json(products);
-//   });
-// app.get('/products/:id', async (req, res) => {
-//     const productId = parseInt(req.params.id, 10);
-//     const product = await manager.getProductByID(productId);
-//     if (product) {
-//       res.json(product);
-//     } else {
-//       res.status(404).json({ message: 'Producto no encontrado' });
-//     }
-//   });
-
+  app.use('/api/views', viewsRouter)
+  app.use('/api/users', userRouter)
   app.use('/api/products', productsRouter)
   app.use('/api/cart', cartRouter)
+  app.use(( err, req, res, next)=>{
+    console.error(err.stack)
+    res.status(500).send('error de server')
+})
 
-app.listen(puerto, () => console.log(`Servidor escuchando en el ${puerto}`));
+const serverHttp = app.listen(puerto, () => console.log(`Servidor escuchando en el ${puerto}`));
+
+
+const io = new Server(serverHttp)
+
+let messagesArray = []
+
+io.on('connection', socket => {
+    console.log('Nuevo cliente conectado')
+
+    socket.on('message', data => {
+        messagesArray.push(data)
+        io.emit('messageLogs', messagesArray)
+    })
+})
