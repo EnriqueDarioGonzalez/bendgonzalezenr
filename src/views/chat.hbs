@@ -1,0 +1,38 @@
+<!-- chat.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <!-- Agrega el enlace a Bootstrap CDN para utilizarlo -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ style }}">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Bienvenido a {{ title }}, {{ name }}</h1>
+
+    <div id="chat-container" class="mt-4">
+      {{#each messages}}
+        <div class="alert alert-info">
+          <strong>{{ this.user }}:</strong> {{ this.message }}
+        </div>
+      {{/each}}
+    </div>
+
+    <form id="message-form" class="mt-4">
+      <div class="form-group">
+        <label for="user">E-Mail:</label>
+        <input type="text" id="user" name="user" value="{{ name }}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="message">Mensaje:</label>
+        <input type="text" id="message" name="message" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+    </form>
+  </div>
+</body>
+</html>
+<script src="/src/chat.js"></script>
